@@ -12,8 +12,6 @@ import './send.css'
 const Send = () => {
     const [searchParams] = useSearchParams();
     const [rAddress, setRAddress] = useState(searchParams.get("address"));
-    const [amt, setAmt] = useState(searchParams.get("amt") || null);
-    const [readableName, setReadableName] = useState(searchParams.get("readableName") || null);
     const [ amount, setAmount ] = React.useState();
     const [ popupState, setPopupState ] = React.useState(false);
     const [ acctBalance, setAcctBalance ] = React.useState()
@@ -33,19 +31,6 @@ const Send = () => {
     }
     function closePopup(){
         setPopupState(false);
-    }
-    async function handleSend() {
-        let getAmount = amt
-        
-        if(Number(getAmount) > Number(amt)) {
-            await console.log(rAddress)
-            .then(setTransactionStatus(true))
-            .then(setStatus(`You sent ${amt} USDC to ${readableName} successfully`))
-        } else {
-            setErrorMsg(`Oops you don't have up to ${amt} USDC in your wallet`)
-            setPopupState(true)
-        }
-
     }
 
     async function handleInputSend() {
@@ -88,27 +73,18 @@ const Send = () => {
                 :
                 <section>
                     <div style={ transactionStatus ? { display : 'none' } : { display : 'block' }}>
-                        <div className="send-card full-card" style={ popupState ? { opacity : '.1' } : { opacity : '1' }} >
+                        <div className="send-card" style={ popupState ? { opacity : '.1' } : { opacity : '1' }} >
                             <div className='send-card-body'>
                                 <div style={ { display : 'block' } }>
-                                    { amt == null ?
                                     <div> 
                                         <div>
-                                            You are about to send USDC to { readableName ? <span> {readableName}</span> : <span> {rAddress}</span> }
+                                            You are about to send USDC to <span> {rAddress}</span>
                                         </div>
                                         <div>
                                             <input className="text-input amount" placeholder="Amount" onChange={amountInput} />
                                             <div className='btn-wrap'><button className="send-submit submit-input" onClick={handleInputSend}>Send</button></div>
                                         </div>
                                     </div>
-                                    :
-                                        <div>
-                                            <div>
-                                                You are about to send {amt} USDC to  { readableName ? <span> {readableName}</span> : <span> {rAddress}</span> }
-                                                <div className='btn-wrap'><button className="send-submit submit-input" onClick={handleSend}>Continue</button></div>
-                                            </div>
-                                        </div>
-                                    }
 
                                 </div>
                             </div>

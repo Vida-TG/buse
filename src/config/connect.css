@@ -1,3 +1,17 @@
+@media screen and (max-width: 750px){
+    .title-img {
+        font-size: xx-large;
+        font-weight: bold;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    .connect-btn {
+        position: fixed;
+        bottom: 0px;
+        width: 97%;
+        margin: 5px 0px;
+    }
+}
+
 .entire-connect {
     position: static;
     display: flex;
@@ -13,7 +27,6 @@
     border-radius: 2px;
     font-size: x-large;
     box-shadow: 0px 0px 7px #000;
-    opacity: .8;
     font-family:'Times New Roman', Times, serif;
 }
 

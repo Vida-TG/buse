@@ -15,13 +15,10 @@ export default function Card() {
     const [ switch1, setSwitch1 ] = React.useState(true);
     const [ switch2, setSwitch2 ] = React.useState(false);
     const [ popupState, setPopupState ] = React.useState(false);
-    const [ url, setUrl ] = React.useState(window.location.href + "send?address=" + address)
+    const [ url, setUrl ] = React.useState(`${window.location.href}send?address=${address}&chain=Goerli`)
     const [ qr, setQr ] = React.useState("")
 
-    const [amt, setAmt] = React.useState("");
-    const [rChain, setRChain] = React.useState("");
-    const [readableName, setReadableName] = React.useState("");
-
+    const [rChain, setRChain] = React.useState("Goerli");
     
     const GenerateQRCode = () => {
         QRCode.toDataURL(
@@ -54,6 +51,7 @@ export default function Card() {
     }
 
     function generateCode(){
+        generateModifiedQR()
         setPopupState(true)
     }
 
@@ -61,45 +59,26 @@ export default function Card() {
         setPopupState(false);
     }
 
-    function amtChange(e){
-        setAmt(e.target.value)
-        generateModifiedQR()
-    }
-    function readableNameChange(e){
-        setReadableName(e.target.value)
-        generateModifiedQR()
-    }
-    function rChainChange(e){
-        setRChain(e.target.value)
-        generateModifiedQR()
-    }
-
     function handleDownload() {
-        saveAs(qr, readableName+address+amt + ".png")
+        saveAs(qr, `${address}${rChain}.png`)
     }
     
     function generateModifiedQR() {
-        if (!amt && !readableName) {
-            return
-        } else if (amt && readableName) {
-            setUrl(window.location.href + "send?address=" + address + "&readableName=" + readableName + "&amt=" + amt)
-            GenerateQRCode();
-            return
-        } else if (amt) {
-            setUrl(window.location.href + "send?address=" + address + "&amt=" + amt)
-            GenerateQRCode()
-            return
-        } else {
-            setUrl(window.location.href + "send?address=" + address + "&readableName=" + readableName)
-            GenerateQRCode()
-            return
-        }
+        setUrl(`${window.location.href}send?address=${address}&chain=${rChain}`)
+        GenerateQRCode()
+        return
     }
 
-    useEffect(() => { 
+    function rChainChange(e){
+        setRChain(e.target.value)
+        generateModifiedQR();
+    }
+
+    useEffect(() => {
+        console.log(rChain)
         GenerateQRCode();
 
-    }, [])
+    }, [rChain, url])
 
     return (
         <>
@@ -129,20 +108,13 @@ export default function Card() {
                                     {qr && (
                                         <>
                                             <img src={qr} className='qr-image' />
-                                            <div className='download-btn-div'>
-                                            <button onClick={handleDownload} className='download-btn'>
-                                                Download
-                                            </button>
-                                            </div>
                                         </>
                                     )}
                                 </div>
                                 <div>
-                                    <input className="text-input amount" placeholder="Amount" onChange={amtChange} value={amt}/>
-                                    <input className="text-input readableName" placeholder="Readable username" onChange={readableNameChange} value={readableName}/>
-                                    <select onChange={rChainChange} value="Fuji">
-                                        <option value="Fuji">Fuji</option>
-                                        <option value="Goerli">Goerli</option>
+                                    <select className="text-input" onChange={rChainChange} value={rChain}>
+                                        <option label="Fuji" value="Fuji">Fuji</option>
+                                        <option label="Goerli" value="Goerli">Goerli</option>
                                     </select>
                                     <button className="submit-input" onClick={generateCode}>Generate code</button>
                                 </div>
