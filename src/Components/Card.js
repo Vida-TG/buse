@@ -19,6 +19,8 @@ export default function Card() {
     const [ qr, setQr ] = React.useState("")
 
     const [rChain, setRChain] = React.useState("Goerli");
+    const [toChain, setToChain] = React.useState("Goerli");
+    const [toAddress, setToAddress] = React.useState("");
     
     const GenerateQRCode = () => {
         QRCode.toDataURL(
@@ -74,6 +76,13 @@ export default function Card() {
         generateModifiedQR();
     }
 
+    function toChainChange(e){
+        setToChain(e.target.value)
+    }
+    function toAddressChange(e){
+        setToAddress(e.target.value)
+    }
+
     useEffect(() => {
         console.log(rChain)
         GenerateQRCode();
@@ -119,8 +128,16 @@ export default function Card() {
                                     <button className="submit-input" onClick={generateCode}>Generate code</button>
                                 </div>
                             </div>
+
+
                             <div style={ switch2 ? { display : 'block' } : { display : 'none' }}>
-                                Send to bank
+                                <div>Send USDC</div>
+                                <input className="text-input" placeholder="Address" onChange={toAddressChange} value={toAddress} />
+                                <select className="text-input" onChange={toChainChange} value={toChain}>
+                                    <option label="Fuji" value="Fuji">Fuji</option>
+                                    <option label="Goerli" value="Goerli">Goerli</option>
+                                </select>
+                                <button className="submit-input" onClick={generateCode}>Send on {toChain} network</button>
                             </div>
                         </div>
                     </div>
