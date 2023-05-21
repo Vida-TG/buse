@@ -19,7 +19,8 @@ export default function Card() {
     const [ qr, setQr ] = React.useState("")
 
     const [amt, setAmt] = React.useState("");
-    const [item, setItem] = React.useState("");
+    const [rChain, setRChain] = React.useState("");
+    const [readableName, setReadableName] = React.useState("");
 
     
     const GenerateQRCode = () => {
@@ -64,20 +65,24 @@ export default function Card() {
         setAmt(e.target.value)
         generateModifiedQR()
     }
-    function itemChange(e){
-        setItem(e.target.value)
+    function readableNameChange(e){
+        setReadableName(e.target.value)
+        generateModifiedQR()
+    }
+    function rChainChange(e){
+        setRChain(e.target.value)
         generateModifiedQR()
     }
 
     function handleDownload() {
-        saveAs(qr, address+item+amt + ".png")
+        saveAs(qr, readableName+address+amt + ".png")
     }
     
     function generateModifiedQR() {
-        if (!amt && !item) {
+        if (!amt && !readableName) {
             return
-        } else if (amt && item) {
-            setUrl(window.location.href + "send?address=" + address + "&item=" + item + "&amt=" + amt)
+        } else if (amt && readableName) {
+            setUrl(window.location.href + "send?address=" + address + "&readableName=" + readableName + "&amt=" + amt)
             GenerateQRCode();
             return
         } else if (amt) {
@@ -85,7 +90,7 @@ export default function Card() {
             GenerateQRCode()
             return
         } else {
-            setUrl(window.location.href + "send?address=" + address + "&item=" + item)
+            setUrl(window.location.href + "send?address=" + address + "&readableName=" + readableName)
             GenerateQRCode()
             return
         }
@@ -119,7 +124,7 @@ export default function Card() {
                         
                         <div  className='card-body'>
                             <div style={ switch1 ? { display : 'block' } : { display : 'none' }}>
-                                <div>Generate and share QR code to receive payment in Near tokens</div>
+                                <div>Generate and share QR code to receive payment in USDC</div>
                                 <div className='qr'>
                                     {qr && (
                                         <>
@@ -134,7 +139,11 @@ export default function Card() {
                                 </div>
                                 <div>
                                     <input className="text-input amount" placeholder="Amount" onChange={amtChange} value={amt}/>
-                                    <input className="text-input item" placeholder="Reason (or item)" onChange={itemChange} value={item}/>
+                                    <input className="text-input readableName" placeholder="Readable username" onChange={readableNameChange} value={readableName}/>
+                                    <select onChange={rChainChange} value="Fuji">
+                                        <option value="Fuji">Fuji</option>
+                                        <option value="Goerli">Goerli</option>
+                                    </select>
                                     <button className="submit-input" onClick={generateCode}>Generate code</button>
                                 </div>
                             </div>

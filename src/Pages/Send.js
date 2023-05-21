@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom/dist';
+import { useAccount, useNetwork } from 'wagmi'
 import cancel from '../Components/cancel.png'
 import giphy from '../Components/watching-eyes.gif'
 import Header from '../Components/Header';
@@ -10,9 +11,9 @@ import './send.css'
 
 const Send = () => {
     const [searchParams] = useSearchParams();
-    const [accountId, setAccountId] = useState(searchParams.get("accountId"));
+    const [rAddress, setRAddress] = useState(searchParams.get("address"));
     const [amt, setAmt] = useState(searchParams.get("amt") || null);
-    const [item, setItem] = useState(searchParams.get("item") || null);
+    const [readableName, setReadableName] = useState(searchParams.get("readableName") || null);
     const [ amount, setAmount ] = React.useState();
     const [ popupState, setPopupState ] = React.useState(false);
     const [ acctBalance, setAcctBalance ] = React.useState()
@@ -22,6 +23,10 @@ const Send = () => {
     const [ errorMsg, setErrorMsg ] = React.useState()
     const navigate = useNavigate()
 
+    const { address, isConnected } = useAccount()
+    const { chain } = useNetwork()
+    
+
 
     function amountInput (e) {
         setAmount(e.target.value)
@@ -30,44 +35,43 @@ const Send = () => {
         setPopupState(false);
     }
     async function handleSend() {
-        let getState = await window.account.state()
-        let getAmount = await window.utils.format.formatNearAmount(getState.amount)
+        let getAmount = amt
         
         if(Number(getAmount) > Number(amt)) {
-            await window.account.sendMoney(accountId, window.utils.format.parseNearAmount(amt))
+            await console.log(rAddress)
             .then(setTransactionStatus(true))
-            .then(setStatus("You sent "+amt+" Near to "+accountId+" successfully"))
+            .then(setStatus(`You sent ${amt} USDC to ${readableName} successfully`))
         } else {
-            setErrorMsg("Oops you don't have up to "+amt+" Near in your wallet")
+            setErrorMsg(`Oops you don't have up to ${amt} USDC in your wallet`)
             setPopupState(true)
         }
 
     }
 
     async function handleInputSend() {
-        let getState = await window.account.state()
-        let getAmount = await window.utils.format.formatNearAmount(getState.amount)
+        let getAmount = amount
         
         if(Number(getAmount) > Number(amount)) {
-            await window.account.sendMoney(accountId, window.utils.format.parseNearAmount(amount))
+            await console.log(rAddress)
             .then(setTransactionStatus(true))
-            .then(setStatus("You sent "+amount+" Near to "+accountId+" successfully"))
+            .then(setStatus(`You sent ${amount} USDC to ${address} successfully`))
         } else {
-            setErrorMsg("Oops you don't have up to "+amount+" Near in your wallet")
+            setErrorMsg(`Oops you don't have up to ${amount} USDC in your wallet`)
             setPopupState(true)
         }
 
     }
 
     useEffect(() => {
-        if (!accountId) {
+        if (!rAddress) {
             navigate('/')
         }
+        /*
         async function getData(){
             let Data = await window.account.state()
             setAcctBalance(Data.amount)
         }
-        getData()
+        getData() */
     }, [acctBalance])
 
     return (
@@ -75,7 +79,7 @@ const Send = () => {
             <Header />
 
             {
-            (window.accountId==='')?
+            (!isConnected)?
                 <div className="full-card card-edit">
                     <img src={giphy} className='giphy'/>
                     <div className="before-login">Please Log In</div>
@@ -90,7 +94,7 @@ const Send = () => {
                                     { amt == null ?
                                     <div> 
                                         <div>
-                                            You are about to send Near to {accountId} { item ? <span> for {item}</span> : "" }
+                                            You are about to send USDC to { readableName ? <span> {readableName}</span> : <span> {rAddress}</span> }
                                         </div>
                                         <div>
                                             <input className="text-input amount" placeholder="Amount" onChange={amountInput} />
@@ -100,7 +104,7 @@ const Send = () => {
                                     :
                                         <div>
                                             <div>
-                                                You are about to send {amt} Near to {accountId} { item ? <span> for {item}</span> : "" }
+                                                You are about to send {amt} USDC to  { readableName ? <span> {readableName}</span> : <span> {rAddress}</span> }
                                                 <div className='btn-wrap'><button className="send-submit submit-input" onClick={handleSend}>Continue</button></div>
                                             </div>
                                         </div>
