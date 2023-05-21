@@ -7,7 +7,6 @@ import {
     useEnsName,
   } from 'wagmi'
 import './connect.css'
-import hybridge from '../hybridge_.png'
    
 export function Connect() {
     const { address, isConnected } = useAccount()
@@ -28,7 +27,7 @@ export function Connect() {
     if (isConnected) {
         return (
             <div className='entire-connect'>
-                <div className='title-img'><img src={ hybridge } /></div>
+                <div className='title-img'>BusePay</div>
                 <button className='connect-btn' onClick={disconnect}>Disconnect</button>
             </div>
         )
@@ -36,7 +35,7 @@ export function Connect() {
    
     return (
       <div className='entire-connect'>
-        <div className='title-img'><img src={ hybridge } /></div>
+        <div className='title-img'>BusePay</div>
         <button onClick={setTheConnectorClicked} className='connect-btn'>Connect Wallet</button>
 
         { !connectorClicked ? "" :

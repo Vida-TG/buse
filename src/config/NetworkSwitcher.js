@@ -1,6 +1,5 @@
 import React from 'react'
-import { useAccount } from 'wagmi'
-import { useNetwork, useSwitchNetwork } from 'wagmi'
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi'
 import './network.css'
 import Avalanche from "./avax.png"
 import Ethereum from "./eth.png"
@@ -21,7 +20,7 @@ export function NetworkSwitcher() {
     return (
       <div className='chain-div'>
         <div className='chain-img-div' onClick={showChainList}>
-          { chain.name == "Ethereum" ? 
+          { chain.name == "Goerli" ? 
             <img className='chain-img' src={Ethereum} />
           : <img className='chain-img' src={Avalanche} /> }
         </div>

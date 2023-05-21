@@ -1,0 +1,9 @@
+.footer {
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: large;
+    opacity: .2;
+    font-family: 'Courier New', Courier, monospace;
+}

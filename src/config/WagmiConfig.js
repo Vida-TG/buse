@@ -1,5 +1,5 @@
 import { infuraProvider } from 'wagmi/providers/infura'
-import { mainnet, avalanche } from 'wagmi/chains'
+import { goerli, avalancheFuji } from 'wagmi/chains'
 import { createConfig, configureChains } from 'wagmi'
 import { publicProvider } from 'wagmi/providers/public'
 
@@ -7,7 +7,7 @@ import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-    [mainnet, avalanche],
+    [goerli, avalancheFuji],
     [
         infuraProvider({
             apiKey: process.env.REACT_APP_INFURA_ID,
@@ -26,7 +26,7 @@ export const config = createConfig({
       new CoinbaseWalletConnector({
         chains,
         options: {
-          appName: 'HybridgeX',
+          appName: 'BusePay',
         },
       }),
     ],
