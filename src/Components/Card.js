@@ -8,6 +8,8 @@ import QRCode from 'qrcode';
 import {saveAs} from "file-saver";
 import giphy from './watching-eyes.gif'
 
+import { Cctp } from '../cctp';
+
 
 export default function Card() {
     const { address, isConnected } = useAccount()
@@ -84,13 +86,12 @@ export default function Card() {
     }
 
     useEffect(() => {
-        console.log(rChain)
         GenerateQRCode();
-
     }, [rChain, url])
 
     return (
         <>
+        <Cctp />
         {
             (!isConnected)?
                 <div className="full-card card-edit">
